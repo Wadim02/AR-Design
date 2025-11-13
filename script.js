@@ -1,5 +1,5 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from './modules/three.module.js';
+import { GLTFLoader } from './modules/GLTFLoader.js';
 
 let scene, camera, renderer, xrRefSpace;
 let chairModel = null;
