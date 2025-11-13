@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>AR Plan Detectat (WebXR)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/examples/js/loaders/GLTFLoader.js"></script>
   <style>
     body { margin: 0; overflow: hidden; background: #000; }
     #start-ar {
@@ -33,13 +31,15 @@
       font-family: sans-serif;
       font-size: 18px;
       display: none;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
   <button id="start-ar">Start AR</button>
-  <div id="plan-text">Plan detectat</div>
+  <div id="plan-text">Plan detectat ✅</div>
 
-  <script src="script.js"></script>
+  <!-- Script modul -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
