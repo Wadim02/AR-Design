@@ -1,3 +1,4 @@
+// script.js
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.181.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.181.0/examples/jsm/loaders/GLTFLoader.js';
 
@@ -6,13 +7,10 @@ let chairModel = null;
 let placed = false;
 let planeMeshes = new Map();
 
-const planText = document.getElementById('plan-text');
-const startButton = document.getElementById('start-ar');
-
-// Inițializare scenă Three.js
+// Initializare Three.js
 scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
-renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.01, 20);
+renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.xr.enabled = true;
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -33,15 +31,15 @@ loader.load('models/chair.glb', gltf => {
     scene.add(chairModel);
 });
 
-// Funcție Start AR
-startButton.addEventListener('click', async () => {
-    if (!navigator.xr) {
-        alert('WebXR nu este suportat pe acest dispozitiv.');
-        return;
-    }
+// Text plan detectat
+const planText = document.getElementById('plan-text');
+
+// Start AR
+document.getElementById('start-ar').addEventListener('click', async () => {
+    if (!navigator.xr) { alert('WebXR nu este suportat pe acest dispozitiv.'); return; }
 
     const session = await navigator.xr.requestSession('immersive-ar', {
-        requiredFeatures: ['hit-test'],
+        requiredFeatures: ['hit-test', 'local-floor'],
         optionalFeatures: ['dom-overlay'],
         domOverlay: { root: document.body }
     });
@@ -51,14 +49,12 @@ startButton.addEventListener('click', async () => {
     const viewerSpace = await session.requestReferenceSpace('viewer');
     const hitTestSource = await session.requestHitTestSource({ space: viewerSpace });
 
-    // Tick loop
-    session.requestAnimationFrame(function onXRFrame(time, frame) {
+    session.requestAnimationFrame(function onXRFrame(time, frame){
         session.requestAnimationFrame(onXRFrame);
-
         const pose = frame.getViewerPose(xrRefSpace);
         if (!pose) return;
 
-        // Plasare model 3D cu hit-test
+        // Plasare model 3D
         if (!placed && chairModel) {
             const hitResults = frame.getHitTestResults(hitTestSource);
             if (hitResults.length > 0) {
@@ -76,7 +72,7 @@ startButton.addEventListener('click', async () => {
 
 // Resize
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
